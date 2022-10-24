@@ -1,13 +1,8 @@
 package com.dormitory.controller;
-
-
-import com.alicp.jetcache.anno.CacheType;
-import com.alicp.jetcache.anno.Cached;
 import com.dormitory.form.SearchForm;
 import com.dormitory.service.MoveoutService;
 import com.dormitory.util.ResultVoUtil;
 import com.dormitory.vo.ResultVO;
-import org.apache.ibatis.annotations.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
