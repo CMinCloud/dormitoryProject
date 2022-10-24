@@ -1,0 +1,29 @@
+server:
+  port: 8181
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/dormitory
+    username: root
+    password: 403630
+    type: com.alibaba.druid.pool.DruidDataSource
+
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl   #打印日志
+  mapper-locations: com/dormitory/mapper/xml/*.xml
+  global-config:
+    banner: off    #关闭mybatis-plus图标
+
+  #jetcache缓存配置
+#  已存在缓存中的数据，再次读取走缓存不用查询数据库
+jetcache:
+  local: #本地缓存
+    default: #没有指定就默认使用default
+      type: linkedhashmap
+      #  key转换成字符串的工具(这里使用fastjson）jar包中包含fastjson的jar
+      keyConvertor: fastjson
+  #      expireAfterWriteInMillis: 1000*1000  #默认过期时间（在这里设置为1000s，详细的方法可以自定义）
+      valueEncode: java   #转发和转回的对象均为java对象
+      valueDecode: java

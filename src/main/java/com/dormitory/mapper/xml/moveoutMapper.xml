@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.dormitory.mapper.MoveoutMapper">
+    <resultMap id="MoveoutResultMap" type="com.dormitory.entity.Student">
+        <result column="dormitory_id" property="dormitoryId"/>
+        <result column="create_date" property="createDate"/>
+    </resultMap>
+
+
+    <select id="listStudentByPage" resultMap="MoveoutResultMap">
+        select * from student where state = '入住' limit #{page} , #{size};
+    </select>
+
+<!--    （迁出登记）学生模糊查询-->
+    <select id="studentSearch" resultMap="MoveoutResultMap">
+        select *  from student where
+        state = '入住' and
+        <choose>
+            <when test="key != null and key == 'studentName'">
+                name like '%${value}%'
+            </when>
+            <when test="key != null and key == 'number'">
+                number like '%${value}%'
+            </when>
+        </choose>
+        limit #{page} , #{size}
+    </select>
+
+<!--已经封装为VO类型-->
+    <select id="moveoutRecordSearch"  resultType="com.dormitory.vo.MoveoutVO" >
+        select moveout.id ,student.name "studentName", dormitory.name "dormitoryName",
+               moveout.reason , moveout.create_date "createDate"
+        from moveout,dormitory,student
+        where
+        dormitory.id = moveout.dormitory_id and student.id = moveout.student_id
+        and
+        <choose>
+            <when test="key != null and key == 'dormitoryName'">
+                dormitory.name like '%${value}%'
+            </when>
+            <when test="key != null and key == 'studentName'">
+                student.name like '%${value}%'
+            </when>
+        </choose>
+        limit #{page} , #{size}
+    </select>
+
+    <select id="getStuSearchTotal" resultType="java.lang.Long">
+        select count(*)  from student where
+        state = '入住' and
+        <choose>
+            <when test="key != null and key == 'studentName'">
+                name like '%${value}%'
+            </when>
+            <when test="key != null and key == 'number'">
+                number like '%${value}%'
+            </when>
+        </choose>
+    </select>
+
+    <select id="getRecordSearchYTotal" resultType="java.lang.Long">
+        select moveout.id "id",student.name "studentName", dormitory.name "dormitoryName",
+        moveout.reason "reason", moveout.create_date "createDate"
+        from moveout,dormitory,student
+        where
+        dormitory.id = moveout.dormitory_id and student.id = moveout.student_id
+        and
+        <choose>
+            <when test="key != null and key == 'dormitoryName'">
+                dormitory.name like '%${value}%'
+            </when>
+            <when test="key != null and key == 'studentName'">
+                student.name like '%${value}%'
+            </when>
+        </choose>
+    </select>
+
+    <select id="getRecordSearchTotal" resultType="java.lang.Long">
+        select count(*)
+        from moveout,dormitory,student
+        where
+        dormitory.id = moveout.dormitory_id and student.id = moveout.student_id
+        and
+        <choose>
+            <when test="key != null and key == 'dormitoryName'">
+                dormitory.name like '%${value}%'
+            </when>
+            <when test="key != null and key == 'studentName'">
+                student.name like '%${value}%'
+            </when>
+        </choose>
+    </select>
+
+
+</mapper>
